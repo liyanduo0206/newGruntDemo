@@ -1,0 +1,29 @@
+@charset "utf-8";
+a:active,a:hover {
+	outline:0
+
+}
+a:link{
+	/*color: #006699;*/
+	color:#000000;
+	font-size: 12px;
+	text-decoration: none;
+}
+a:visited{
+	color: #006699; /* #928BA4*/
+	font-size: 12px;
+	text-decoration: none;
+}
+a:hover{
+	color: #D95F40;
+	font-size: 12px;
+	text-decoration: underline;
+}
+a:active{
+	text-decoration: none;
+	color: #CC3300;
+}
+
+.bgcolor1{
+	background-color: #8DD8E5;
+}

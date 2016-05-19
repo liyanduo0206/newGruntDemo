@@ -1,0 +1,28 @@
+{
+  "name": "myGruntDemo",
+  "version": "0.0.1",
+  "description": "hello world",
+  "dependencies": {},
+  "devDependencies": {
+    "matchdep": "latest",
+    "shelljs": "latest",
+    "ngmshell": "latest",
+    "grunt": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-connect": "latest",
+    "grunt-contrib-htmlmin": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-imagemin": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-usemin": "latest",
+    "connect-livereload": "latest"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "author": "liyd",
+  "license": "MIT"
+}
