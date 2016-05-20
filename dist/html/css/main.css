@@ -1,0 +1,36 @@
+@charset "utf-8";
+html {
+	font-family:sans-serif;
+	-webkit-text-size-adjust:100%;
+	-ms-text-size-adjust:100%;
+	overflow:hidden;/* 1 */
+}
+_html {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body
+{
+	background-color: White;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	
+	/*-moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none; */
+}
+body,table td,select {
+	font-family: "Lucida Grande", Verdana, Lucida, Arial, Helvetica,sans-serif;
+}
+
+label
+{
+	font-size: 11pt;
+	font: 12px "ËÎÌו";
+};

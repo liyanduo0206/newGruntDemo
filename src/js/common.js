@@ -63,14 +63,14 @@ var library={
   month:"月",
   day:"日",
   qr_strategy_isnull:"二维码策略为空"
-}
+};
 
 tender_library={
   pt_tender_name:"招标项目"
-}
+};
 
 calendar_library={
   
-}
+};
 
 

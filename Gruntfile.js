@@ -1,5 +1,7 @@
 module.exports = function (grunt) {
+	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
+	grunt.file.defaultEncoding = 'gbk';
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
 		meta : {
@@ -44,9 +46,11 @@ module.exports = function (grunt) {
 		uglify : {
 			prod : {
 				options : {
-					mangle : {
+					mangle : { //混淆变量名
 						except : ['require', 'exports', 'module', 'window']
 					},
+					preserveComments : 'all', //不删除注释，还可以为 false（删除全部注释），some（保留@preserve @license @cc_on等注释）
+					footer : '\n/*! <%= pkg.name %> 最后修改于： <%= grunt.template.today("yyyy-mm-dd") %> */', //添加footer
 					compress : {
 						global_defs : {
 							PROD : true
@@ -62,22 +66,54 @@ module.exports = function (grunt) {
 						expand : true,
 						cwd : 'dist/html',
 						src : ['js/*.js', '!js/*.min.js'],
+						dest : 'dist/html',
+						rename : function (dest, src) {
+							var folder = src.substring(0, src.lastIndexOf('/'));
+							var filename = src.substring(src.lastIndexOf('/'), src.length);
+							//  var filename=src;
+							filename = filename.substring(0, filename.lastIndexOf('.'));
+							var fileresult = dest +"/"+ folder + filename + '.min.js';
+							grunt.log.writeln("现处理文件：" + src + "  处理后文件：" + fileresult);
+							return fileresult;
+							//return  filename + '.min.js';
+						}
+					}
+				]
+			},
+			buildb : { //任务二：压缩b.js，输出压缩信息
+				options : {
+					report : "min" //输出压缩率，可选的值有 false(不输出信息)，gzip
+				},
+				files : [{
+						expand : true,
+						cwd : 'dist/html',
+						src : ['js/*.js', '!js/*.min.js'],
 						dest : 'dist/html'
 					}
 				]
-			}
+			},
 		},
 		//压缩CSS
 		cssmin : {
 			prod : {
 				options : {
 					report : 'gzip'
+					//美化代码
 				},
 				files : [{
 						expand : true,
 						cwd : 'dist/html',
 						src : ['css/*.css'],
-						dest : 'dist/html'
+						dest : 'dist/html',
+						rename : function (dest, src) {
+							var folder = src.substring(0, src.lastIndexOf('/'));
+							var filename = src.substring(src.lastIndexOf('/'), src.length);
+							//  var filename=src;
+							filename = filename.substring(0, filename.lastIndexOf('.'));
+							var fileresult = dest +"/"+ folder + filename + '.min.css';
+							grunt.log.writeln("现处理文件：" + src + "  处理后文件：" + fileresult);
+							return fileresult;
+						}
 					}
 				]
 			}
@@ -128,7 +164,7 @@ module.exports = function (grunt) {
 		},
 
 		jshint : {
-			build : ['Gruntfile.js', 'src/*.js'],
+			build : ['Gruntfile.js', 'src/js/*.js'],
 			/*t4s:['Gruntfile.js'],
 			t3s:['src/*.js'],*/
 			options : {
@@ -136,7 +172,7 @@ module.exports = function (grunt) {
 			}
 		},
 		csslint : {
-			build : ['Gruntfile.js', 'src/*.js'],
+			build : ['src/css/*.css'], //'Gruntfile.js',
 			/*t4s:['Gruntfile.js'],
 			t3s:['src/*.js'],*/
 			options : {
@@ -173,26 +209,33 @@ module.exports = function (grunt) {
 		}
 	});
 
-	// grunt.loadNpmTasks('grunt-unwrap');
-	//grunt.loadNpmTasks('grunt-contrib-uglify');
-	//grunt.loadNpmTasks('grunt-contrib-jshint');
-	//grunt.loadNpmTasks('grunt-contrib-watch');
-	//grunt.loadNpmTasks('grunt-contrib-csslint');
-
-	//grunt.loadNpmTasks('grunt-cssmain');
-	//grunt.loadNpmTasks('grunt-contrib-concat');
-
 	grunt.registerTask('prod', [
 			'copy', //复制文件
 			'concat', //合并文件
 			'imagemin', //图片压缩
 			'cssmin', //CSS压缩
-			'uglify', //JS压缩
+			'uglify:prod', //JS压缩
 			'usemin', //HTML处理
 			'htmlmin' //HTML压缩
 		]);
 	grunt.registerTask('publish', ['clean', 'prod']);
+
+	grunt.registerTask('default', ['jshint', 'uglify', 'csslint', 'concat']);
 	
-	grunt.registerTask('default', ['jshint', 'uglify', 'cssmain', 'csslint', 'concat']);
+	
+	 grunt.registerTask('build', 'require demo', function () {
+
+    //第一步，读取配置信息
+    var cfg = grunt.file.readJSON('cfg.json');
+    cfg = cfg.requirejs;
+    grunt.config.set('requirejs', { test: cfg });
+
+    //第二步，设置参数
+    grunt.log.debug('参数：' + JSON.stringify(grunt.config()));
+
+    //第三步跑任务
+    grunt.task.run(['requirejs']);
+    
+  });
 
 };

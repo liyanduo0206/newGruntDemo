@@ -44,7 +44,7 @@ function gvSort(obj,vGridId,vDataType){
 	var row = jQuery('#gvGridView'+vGridId).find('tbody tr');
 	jQuery.each(row, function (i) {
 		arr[i] = row[i];
-	})
+	});
 	if (jQuery(this).hasClass('gv_sort')) {
 		arr.reverse();
 	} else {
@@ -56,7 +56,7 @@ function gvSort(obj,vGridId,vDataType){
 	var fragment = document.createDocumentFragment();
 		jQuery.each(arr, function (i) {
 			fragment.appendChild(arr[i]);
-		})
+		});
 		// $('tbody').remove();
 		//$('table').append('<tbody></tbody>')
 		//Each(arr,function(o){fragment.appendChild(o)})
@@ -74,27 +74,28 @@ function sortStr(index, dataType) {
 		var aText = jQuery(a).find('td:nth-child(' + index + ')').text();
 		var bText = jQuery(b).find('td:nth-child(' + index + ')').text();
 
-		if (dataType != 'roomType') {
-			debugger;
-			aText = Parse(aText, dataType)
-				bText = Parse(bText, dataType)
+		if (dataType !== 'roomType') {
+			
+			aText = new Parse(aText, dataType);
+				bText =new Parse(bText, dataType);
 				return aText > bText ? -1 : bText > aText ? 1 : 0;
-		} else
-			return aText.localeCompare(bText)
-	}
+		} else{
+			return aText.localeCompare(bText);
+		}		
+	};
 }
 function Parse(data, dataType) {
 	switch (dataType) {
 	case 'num':
-		return parseFloat(data) || 0
+		return parseFloat(data) || 0 ;
 	case 'date':
-		return Date.parse(data) || 0
+		return Date.parse(data) || 0 ;
 	default:
-		return splitStr(data)
+		return splitStr(data) ;
 	}
 }
 function splitStr(data) {
-	var re = /^[\$a-zA-z\u4e00-\u9fa5 ]*(.*?)[a-zA-z\u4e00-\u9fa5 ]*$/
-		data = data.replace(re, '$1')
-		return parseFloat(data)
+	var re = /^[\$a-zA-z\u4e00-\u9fa5 ]*(.*?)[a-zA-z\u4e00-\u9fa5 ]*$/ ;
+		data = data.replace(re, '$1') ;
+		return parseFloat(data) ;
 }
